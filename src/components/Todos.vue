@@ -10,15 +10,24 @@
 
 <script>
 //mapGetters is like 'connect' in redux
-import { mapGetters } from "vuex";
+//mapActions is to call the action from the module
+import { mapGetters, mapActions } from "vuex";
 export default {
   name: "Todos",
+  //if only the action method, can use this: methods: mapAction(['fetchTodos'])
+  methods: {
+    ...mapActions(["fetchTodos"])
+  },
   //computed property defines which getters we want to use
-  computed: mapGetters(["allTodos"])
+  computed: mapGetters(["allTodos"]),
+  //lifecycle method -- created (call the action method before the component is loaded)
+  created() {
+    this.fetchTodos();
+  }
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .todos {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
