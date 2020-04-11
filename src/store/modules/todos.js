@@ -16,7 +16,7 @@ const actions = {
     const response = await axios.get(
       "https://jsonplaceholder.typicode.com/todos"
     );
-    console.log(response.data);
+    // console.log(response.data);
     //use 'commit' to pass the response to mutation
     // commit(mutation name, response)
     commit("setTodos", response.data);
@@ -33,16 +33,23 @@ const actions = {
     commit("removeTodo", id);
   },
   async filterTodos({ commit }, event) {
-    console.log("event", event);
+    // console.log("event", event);
     //get selected number
-    const limit = parseInt(
-      event.target.options[event.target.options.selectedIndex].innerText
-    );
-    console.log(limit);
+    const limit = parseInt(event.target.value);
+    // console.log(limit);
     const response = await axios.get(
       `https://jsonplaceholder.typicode.com/todos?_limit=${limit}`
     );
     commit("setTodos", response.data);
+  },
+  async updateTodo({ commit }, updatedTodo) {
+    // console.log("updated id", updatedTodo.id);
+    const response = await axios.put(
+      `https://jsonplaceholder.typicode.com/todos/${updatedTodo.id}`,
+      updatedTodo
+    );
+    // console.log(response.data);
+    commit("updateTodo", response.data);
   }
 };
 
@@ -52,7 +59,14 @@ const mutations = {
   // newTodo: (state, todo) => state.todos.unshift(todo)
   newTodo: (state, todo) => (state.todos = [todo, ...state.todos]),
   removeTodo: (state, id) =>
-    (state.todos = state.todos.filter(todo => todo.id !== id))
+    (state.todos = state.todos.filter(todo => todo.id !== id)),
+  updateTodo: (state, updatedTodo) => {
+    // need to stay in the same place
+    const index = state.todos.findIndex(todo => todo.id === updatedTodo.id);
+    if (index !== -1) {
+      state.todos.splice(index, 1, updatedTodo);
+    }
+  }
 };
 
 export default {
