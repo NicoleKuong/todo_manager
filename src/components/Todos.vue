@@ -3,7 +3,10 @@
     <h3>Todos</h3>
     <div class="todos">
       <!-- v-bing:key can be shortened as :key -->
-      <div v-for="todo in allTodos" :key="todo.id" class="todo">{{todo.title}}</div>
+      <div v-for="todo in allTodos" :key="todo.id" class="todo">
+        {{todo.title}}
+        <i @click="deleteTodo(todo.id)" class="fas fa-trash-alt"></i>
+      </div>
     </div>
   </div>
 </template>
@@ -16,7 +19,7 @@ export default {
   name: "Todos",
   //if only the action method, can use this: methods: mapAction(['fetchTodos'])
   methods: {
-    ...mapActions(["fetchTodos"])
+    ...mapActions(["fetchTodos", "deleteTodo"])
   },
   //computed property defines which getters we want to use
   computed: mapGetters(["allTodos"]),
@@ -42,4 +45,12 @@ export default {
   position: relative;
   cursor: pointer;
 }
-</style>
+
+i {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  color: #fff;
+  cursor: pointer;
+}
+</style> 
